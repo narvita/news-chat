@@ -1,12 +1,12 @@
 export interface ChatMessage {
   id: string;
-  role: MassageRole[keyof MassageRole];
+  role: MassageRoleType;
   content: string;
   outro?: string;
   isStreaming?: boolean;
   toolStatus?: string;
-  articles?: any[];
-  loadingArticles?: boolean
+  articles?: Article[];
+  loadingArticles?: boolean;
 }
 
 export const MassageRole = {
@@ -15,7 +15,7 @@ export const MassageRole = {
   TOOL: "tool",
 } as const;
 
-export type MassageRole = (typeof MassageRole)[keyof typeof MassageRole];
+export type MassageRoleType = (typeof MassageRole)[keyof typeof MassageRole];
 
 export interface Article {
   id: number;

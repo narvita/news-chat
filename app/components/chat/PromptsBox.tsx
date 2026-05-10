@@ -19,7 +19,7 @@ export default function PromptsBox({ onSelect }: Props) {
   return (
     <div className="flex flex-col items-center justify-center flex-1 h-full px-4 pb-12">
       <h1 className="text-white text-3xl font-semibold mb-8 tracking-tight">
-        What&apos;s in the news?
+        What's in the news?
       </h1>
       <div className="flex flex-wrap gap-3 justify-center max-w-2xl">
         {prompts.map((prompt) => (

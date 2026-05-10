@@ -2,8 +2,9 @@
 import { Input } from "../input";
 import { useChat } from "../../hooks/chatHook";
 import PromptsBox from "./PromptsBox";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AssistantContent } from "./Assistant";
+import { Article } from "@/app/types/chat";
 
 
 export default function Chat() {

@@ -1,3 +1,5 @@
+import { Article } from "@/app/types/chat";
+
 function formatDate(dateStr: string | null | undefined): string {
   if (!dateStr) return "";
   try {
@@ -11,10 +13,10 @@ function formatDate(dateStr: string | null | undefined): string {
   }
 }
 
-export default function ArticleGrid({ articles }: any) {
+export default function ArticleGrid({ articles }: { articles: Article[] }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-      {articles.map((article: any, index: number) => (
+      {articles.map((article: Article, index: number) => (
         <div
           key={article.id}
           className="border border-white/10 rounded-xl overflow-hidden bg-[#2f2f2f] hover:bg-[#383838] transition-colors"

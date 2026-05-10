@@ -3,7 +3,10 @@
 import { useState } from "react";
 import { ChatMessage, MassageRole } from "../types/chat";
 
-function updateLast(prev: ChatMessage[], patch: Partial<ChatMessage>): ChatMessage[] {
+function updateLast(
+  prev: ChatMessage[],
+  patch: Partial<ChatMessage>,
+): ChatMessage[] {
   const copy = [...prev];
   copy[copy.length - 1] = { ...copy[copy.length - 1], ...patch };
   return copy;
@@ -30,7 +33,11 @@ export function useChat() {
       articles: [],
     };
 
-    setMessages((prev) => [...prev, userMessage, assistantMessage]);
+    const nextMessages = [...messages, userMessage];
+
+    setMessages([...nextMessages, assistantMessage]);
+  console.log(nextMessages, 'nextmassages');
+  
 
     const response = await fetch("/api/chat", {
       method: "POST",
@@ -44,6 +51,7 @@ export function useChat() {
 
     while (true) {
       const { done, value } = await reader!.read();
+
       if (done) break;
 
       buffer += decoder.decode(value, { stream: true });
@@ -61,7 +69,9 @@ export function useChat() {
 
             if (data.type === "tool_start") {
               setMessages((prev) =>
-                updateLast(prev, { toolStatus: `Searching news for "${data.query}"...` })
+                updateLast(prev, {
+                  toolStatus: `Searching news for "${data.query}"...`,
+                }),
               );
             }
 
@@ -78,26 +88,35 @@ export function useChat() {
 
             if (data.type === "loading_articles") {
               setMessages((prev) =>
-                updateLast(prev, { loadingArticles: true })
+                updateLast(prev, { loadingArticles: true }),
               );
             }
 
             if (data.type === "articles") {
               setMessages((prev) =>
-                updateLast(prev, { articles: data.articles, loadingArticles: false })
+                updateLast(prev, {
+                  articles: data.articles,
+                  loadingArticles: false,
+                }),
               );
             }
 
             if (data.type === "outro") {
               setMessages((prev) => {
                 const last = prev[prev.length - 1];
-                return updateLast(prev, { outro: (last.outro ?? "") + data.content });
+                return updateLast(prev, {
+                  outro: (last.outro ?? "") + data.content,
+                });
               });
             }
 
             if (data.type === "error") {
               setMessages((prev) =>
-                updateLast(prev, { content: "Something went wrong.", isStreaming: false, toolStatus: "" })
+                updateLast(prev, {
+                  content: "Something went wrong.",
+                  isStreaming: false,
+                  toolStatus: "",
+                }),
               );
             }
           } catch (err) {
@@ -107,7 +126,13 @@ export function useChat() {
       }
     }
 
-    setMessages((prev) => updateLast(prev, { isStreaming: false, toolStatus: "", loadingArticles: false }));
+    setMessages((prev) =>
+      updateLast(prev, {
+        isStreaming: false,
+        toolStatus: "",
+        loadingArticles: false,
+      }),
+    );
   }
 
   return { messages, sendMessage };

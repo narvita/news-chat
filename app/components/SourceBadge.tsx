@@ -1,7 +1,9 @@
-export function SourceBadge({ articles }: { articles: any[] }) {
+import { Article } from "../types/chat";
+
+export function SourceBadge({ articles }: { articles: Article[] }) {
   return (
     <div className="flex flex-wrap gap-2 mt-3">
-      {articles.map((a: any) => {
+      {articles.map((a: Article) => {
         let hostname = "";
         try { hostname = new URL(a.url).hostname; } catch {}
         return (
